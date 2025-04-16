@@ -1,11 +1,19 @@
 const express = require('express');
 const axios = require('axios');
 const app = express();
+const cors = require('cors');
 
 console.log('Starting proxy server...');
 
 const API_KEY = process.env.VITE_API_KEY;
 const BASE_URL = 'http://www.omdbapi.com/';
+
+// Configure CORS
+app.use(cors({
+  origin: 'https://movie-explore-p7ss.onrender.com', // Replace with your frontend's domain
+  methods: ['GET', 'POST'], // Allowed HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+}));
 
 // Log all incoming requests
 app.use((req, res, next) => {
@@ -43,7 +51,6 @@ app.get('/api/proxy', async (req, res) => {
       timeout: 10000,
       headers: {
         'Accept': 'application/json',
-        'User-Agent': 'Movie-Explore-Proxy/1.0'
       }
     });
     console.log('Proxy fetch successful');
